@@ -20,7 +20,7 @@ public class Model {
 
         PriorityQueue<DataObject> pq = findKNN(trainingData, testObject, k);
 
-        Map<String, Integer> labelCount = countOccurances(pq);
+        Map<String, Integer> labelCount = countOccurrence(pq);
 
         return getHighestCountLabel(labelCount);
     }
@@ -43,7 +43,7 @@ public class Model {
     }
 
     /**
-     * @param labelCount map of counted labele occurances
+     * @param labelCount map of counted label occurrence
      * @return Label with the highest count
      */
     private static String getHighestCountLabel(Map<String, Integer> labelCount) {
@@ -66,7 +66,7 @@ public class Model {
      * @param pq priority queue of DataObject
      * @return Counted occurances of each label
      */
-    private static Map<String, Integer> countOccurances(PriorityQueue<DataObject> pq) {
+    private static Map<String, Integer> countOccurrence(PriorityQueue<DataObject> pq) {
 
         Map<String, Integer> labelCount = new HashMap<>();
         for (DataObject dataObject : pq) {
