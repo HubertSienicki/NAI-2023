@@ -2,11 +2,11 @@ package datamodel;
 
 import java.util.List;
 
-public class Iris {
+public class DataObject {
     private String className;
     private List<Double> data;
 
-    public Iris(String className, List<Double> data) {
+    public DataObject(String className, List<Double> data) {
         this.className = className;
         this.data = data;
     }
@@ -17,5 +17,13 @@ public class Iris {
 
     public List<Double> getData() {
         return data;
+    }
+
+    @Override
+    public String toString() {
+        return "Iris{" +
+                "className='" + className + '\'' +
+                ", data=" + data +
+                '}';
     }
 }

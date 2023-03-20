@@ -1,6 +1,6 @@
 package parser.fileparser;
 
-import datamodel.Iris;
+import datamodel.DataObject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -30,20 +30,17 @@ public class FileParser {
         return textFile.toString();
     }
 
-    //TODO: Finish file parser
-//    public List<Iris> parseFile() {
-//        try {
-//            String textFile = readFile();
-//            return Stream.of(textFile.split("\n")).forEach(line -> {
-//                List<String> splitLine = splitLine(line);
-//
-//                String className = splitLine.get(1);
-//                List<Double> data = getData(splitLine);
-//            }).collect(Collectors.toList());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    public List<DataObject> parseFile() {
+        try {
+
+            String textFile = readFile();
+            List<String> testObjects = List.of(textFile.split("\n"));
+            return testObjects.stream().map(this::generateVector).collect(Collectors.toList());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private List<String> splitLine(String line) {
         List<String> split = new ArrayList<>();
@@ -52,7 +49,15 @@ public class FileParser {
         return split;
     }
 
-    private List<Double>getData(List<String> splitLine){
+    private List<Double> getData(List<String> splitLine) {
         return Stream.of(splitLine.get(0).split(",")).map(Double::parseDouble).collect(Collectors.toList());
+    }
+
+    private DataObject generateVector(String line) {
+        List<String> splitLine = splitLine(line);
+
+        String className = splitLine.get(1);
+        List<Double> data = getData(splitLine);
+        return new DataObject(className, data);
     }
 }
