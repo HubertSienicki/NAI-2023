@@ -3,7 +3,7 @@ package datamodel;
 import java.util.List;
 
 public class DataModel {
-    private List<Double> data;
+    private final List<Double> data;
     private String className;
 
     public DataModel(List<Double> data, String className) {
@@ -15,7 +15,15 @@ public class DataModel {
         return className;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public List<Double> getData() {
+        return data;
+    }
+
+    @Override
+    public String toString() {
+        return "DataModel{" +
+                "data=" + data +
+                ", className='" + className + '\'' +
+                '}';
     }
 }
