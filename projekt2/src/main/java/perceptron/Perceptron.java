@@ -10,6 +10,7 @@ public class Perceptron {
 
     private final double[] weights;
     private final double learningRate;
+    private final int numFeatures;
     private final Random random;
     private final HashMap<String, Integer> trainingMap = new HashMap<>();
     private final HashMap<Integer, String> resultMap = new HashMap<>();
@@ -21,12 +22,13 @@ public class Perceptron {
      * @param learningRate learning rate of an algorithm
      */
     public Perceptron(int numFeatures, double learningRate) {
+        this.numFeatures = numFeatures;
         this.weights = new double[numFeatures];
         this.learningRate = learningRate;
         this.random = new Random();
         initializeWeights();
 
-        trainingMap.put("Iris-versicolor", 0 );
+        trainingMap.put("Iris-versicolor", 0);
         trainingMap.put("Iris-virginica", 1);
 
         resultMap.put(0, "Iris-versicolor");
@@ -122,11 +124,7 @@ public class Perceptron {
             }
             counter++;
 
-            System.out.println(
-                    "\nClassified as: {" + resultMap.get(this.predict(testModel.getData())) +
-                            "}\nTrue value: {" + testModel.getClassName() +
-                            "}\nAccuracy: " + accuracy / Double.parseDouble(String.valueOf(counter)) * 100 + "%\n"
-            );
+            System.out.println("\nClassified as: {" + resultMap.get(this.predict(testModel.getData())) + "}\nTrue value: {" + testModel.getClassName() + "}\nAccuracy: " + accuracy / Double.parseDouble(String.valueOf(counter)) * 100 + "%\n");
         }
     }
 
@@ -137,10 +135,10 @@ public class Perceptron {
         }
         counter++;
 
-        System.out.println(
-                "\nClassified as: {" + resultMap.get(this.predict(features)) +
-                        "}\nTrue value: {" + className +
-                        "}\nAccuracy: " + accuracy / Double.parseDouble(String.valueOf(counter)) * 100 + "%\n"
-        );
+        System.out.println("\nClassified as: {" + resultMap.get(this.predict(features)) + "}\nTrue value: {" + className + "}\nAccuracy: " + accuracy / Double.parseDouble(String.valueOf(counter)) * 100 + "%\n");
+    }
+
+    public int getNumFeatures() {
+        return numFeatures;
     }
 }

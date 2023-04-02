@@ -13,13 +13,14 @@ import java.util.List;
 public class Reader {
 
     private final FileReader fileReader;
+
     public Reader(String path) throws FileNotFoundException {
         fileReader = new FileReader(path);
     }
 
     /**
      * @return Whole file as a string
-     * @throws IOException
+     * @throws IOException when input is invalid
      */
     public List<DataModel> readFile() throws IOException {
         String line;
