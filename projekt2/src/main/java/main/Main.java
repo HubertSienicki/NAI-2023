@@ -13,47 +13,40 @@ import filereader.Reader;
 import perceptron.Perceptron;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.Scanner;
+
+import static java.lang.System.in;
+import static java.lang.System.out;
+import static menu.Menu.startMenu;
 
 public class Main {
     public static void main(String[] args) {
         try {
-            Logger logger = Logger.getLogger(String.valueOf(DataModel.class));
-
             Reader reader = new Reader("data/perceptron.data");
             List<DataModel> trainingData = reader.readFile();
 
             Reader reader2 = new Reader("data/perceptron.test.data");
             List<DataModel> testData = reader2.readFile();
 
-            HashMap<Integer, String> map = new HashMap<>();
-            map.put(0, "Iris-versicolor");
-            map.put(1, "Iris-virginica");
 
-            double accuracy = 0.0;
-            int counter = 0;
+            Perceptron perceptron = new Perceptron(trainingData.get(0).getData().size(), 0.01);
+            perceptron.train(trainingData, 70);
 
+            perceptron.showResults(testData);
 
-            Perceptron perceptron = new Perceptron(trainingData.get(0).getData().size(), 0.0001);
-            perceptron.train(trainingData, 500);
+            Scanner sc = new Scanner(in);
+            List<Double> features = new ArrayList<>();
 
-            //accuracy calculation
-            for (DataModel testModel : testData) {
-                if (map.get(perceptron.predict(testModel.getData())).equals(testModel.getClassName())) {
-                    accuracy += 1.0;
-                }
-                counter++;
+            out.println("-----------------Menu-----------------");
+            out.println("1. Manually classify labels");
+            out.println(".quit Quit the application");
 
-                logger.info(
-                        "\nClassified as: {" + map.get(perceptron.predict(testModel.getData())) +
-                                "}\nTrue value: {" + testModel.getClassName() +
-                                "}\nAccuracy: " + accuracy / Double.parseDouble(String.valueOf(counter)) * 100 + "%\n"
-                );
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            startMenu(perceptron, sc, features);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 }
+

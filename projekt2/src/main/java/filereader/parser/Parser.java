@@ -20,8 +20,6 @@ public class Parser {
 
         String className = values[values.length - 1];
 
-        DataModel dataModel = new DataModel(features, className);
-        
-        return dataModel;
+        return new DataModel(features, className);
     }
 }

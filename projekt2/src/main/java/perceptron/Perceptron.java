@@ -11,9 +11,13 @@ public class Perceptron {
     private final double[] weights;
     private final double learningRate;
     private final Random random;
+    private final HashMap<String, Integer> trainingMap = new HashMap<>();
+    private final HashMap<Integer, String> resultMap = new HashMap<>();
+    private double accuracy = 0.0;
+    private int counter = 0;
 
     /**
-     * @param numFeatures specifies a number of input features
+     * @param numFeatures  specifies a number of input features
      * @param learningRate learning rate of an algorithm
      */
     public Perceptron(int numFeatures, double learningRate) {
@@ -21,6 +25,12 @@ public class Perceptron {
         this.learningRate = learningRate;
         this.random = new Random();
         initializeWeights();
+
+        trainingMap.put("Iris-versicolor", 0 );
+        trainingMap.put("Iris-virginica", 1);
+
+        resultMap.put(0, "Iris-versicolor");
+        resultMap.put(1, "Iris-virginica");
     }
 
     /**
@@ -34,13 +44,10 @@ public class Perceptron {
     }
 
     /**
-     * @param data list of DataModel objects containing features and class name
+     * @param data      list of DataModel objects containing features and class name
      * @param maxEpochs specifies maximum number of epochs to train the perceptron
      */
     public void train(List<DataModel> data, int maxEpochs) {
-        HashMap<String, Integer> map = new HashMap<>();
-        map.put("Iris-versicolor", 0);
-        map.put("Iris-virginica", 1);
 
         //init counter for the number of epochs
         //and a flag whether there were any errors in the current epoch
@@ -56,7 +63,7 @@ public class Perceptron {
                 //extracting features and labels
                 List<Double> features = dataPoint.getData();
                 //mapping value to a class name
-                int label = map.get(dataPoint.getClassName());
+                int label = trainingMap.get(dataPoint.getClassName());
 
                 //prediction based on the current weights
                 double predictedLabel = predict(features);
@@ -74,6 +81,7 @@ public class Perceptron {
 
     /**
      * Computes dot product of the weights to make the prediction
+     *
      * @param features array of doubles representing input features
      * @return If dot product is >= 0, return 0, else return 1
      */
@@ -89,8 +97,9 @@ public class Perceptron {
 
     /**
      * Private helper to adjust weights based on the error in the prediction
-     * @param features array of doubles representing input features
-     * @param label an integer that represents the true label for the data point.
+     *
+     * @param features       array of doubles representing input features
+     * @param label          an integer that represents the true label for the data point.
      * @param predictedLabel a double that represents the predicted label for the data point.
      */
     private void updateWeights(List<Double> features, int label, double predictedLabel) {
@@ -102,5 +111,36 @@ public class Perceptron {
         for (int i = 0; i < weights.length; i++) {
             weights[i] += learningRate * error * features.get(i);
         }
+    }
+
+    public void showResults(List<DataModel> testData) {
+
+        //accuracy calculation
+        for (DataModel testModel : testData) {
+            if (resultMap.get(this.predict(testModel.getData())).equals(testModel.getClassName())) {
+                accuracy += 1.0;
+            }
+            counter++;
+
+            System.out.println(
+                    "\nClassified as: {" + resultMap.get(this.predict(testModel.getData())) +
+                            "}\nTrue value: {" + testModel.getClassName() +
+                            "}\nAccuracy: " + accuracy / Double.parseDouble(String.valueOf(counter)) * 100 + "%\n"
+            );
+        }
+    }
+
+    public void showResults(List<Double> features, String className) {
+
+        if (resultMap.get(this.predict(features)).equals(className)) {
+            accuracy += 1.0;
+        }
+        counter++;
+
+        System.out.println(
+                "\nClassified as: {" + resultMap.get(this.predict(features)) +
+                        "}\nTrue value: {" + className +
+                        "}\nAccuracy: " + accuracy / Double.parseDouble(String.valueOf(counter)) * 100 + "%\n"
+        );
     }
 }
