@@ -21,18 +21,18 @@ public class Perceptron {
      * @param numFeatures  specifies a number of input features
      * @param learningRate learning rate of an algorithm
      */
-    public Perceptron(int numFeatures, double learningRate) {
+    public Perceptron(int numFeatures, double learningRate, String firstClassName, String secondClassName) {
         this.numFeatures = numFeatures;
         this.weights = new double[numFeatures];
         this.learningRate = learningRate;
         this.random = new Random();
         initializeWeights();
 
-        trainingMap.put("Iris-versicolor", 0);
-        trainingMap.put("Iris-virginica", 1);
+        trainingMap.put(firstClassName, 0);
+        trainingMap.put(secondClassName, 1);
 
-        resultMap.put(0, "Iris-versicolor");
-        resultMap.put(1, "Iris-virginica");
+        resultMap.put(0, firstClassName);
+        resultMap.put(1, secondClassName);
     }
 
     /**
@@ -65,15 +65,15 @@ public class Perceptron {
                 //extracting features and labels
                 List<Double> features = dataPoint.getData();
                 //mapping value to a class name
-                int label = trainingMap.get(dataPoint.getClassName());
+                int trueClassName = trainingMap.get(dataPoint.getClassName());
 
                 //prediction based on the current weights
-                double predictedLabel = predict(features);
+                double predictedClassName = predict(features);
 
                 //if the prediction is not correct, flag is set to true and weights are updated
-                if (predictedLabel != label) {
+                if (predictedClassName != trueClassName) {
                     error = true;
-                    updateWeights(features, label, predictedLabel);
+                    updateWeights(features, trueClassName, predictedClassName);
                 }
             }
 
@@ -99,7 +99,6 @@ public class Perceptron {
 
     /**
      * Private helper to adjust weights based on the error in the prediction
-     *
      * @param features       array of doubles representing input features
      * @param label          an integer that represents the true label for the data point.
      * @param predictedLabel a double that represents the predicted label for the data point.
@@ -107,11 +106,11 @@ public class Perceptron {
     private void updateWeights(List<Double> features, int label, double predictedLabel) {
 
         //computes error difference as the difference between true label and predicted label
-        double error = label - predictedLabel;
+        double weightCoefficient = label - predictedLabel;
 
         //for each weight, method updates it by adding the product of learning rate, error and feature value
         for (int i = 0; i < weights.length; i++) {
-            weights[i] += learningRate * error * features.get(i);
+            weights[i] += learningRate * weightCoefficient * features.get(i);
         }
     }
 

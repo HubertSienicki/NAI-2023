@@ -31,7 +31,13 @@ public class Main {
             List<DataModel> testData = reader2.readFile();
 
 
-            Perceptron perceptron = new Perceptron(trainingData.get(0).getData().size(), 0.01);
+            Perceptron perceptron = new Perceptron(
+                    trainingData.get(0).getData().size(),
+                    0.01,
+                    "Iris-versicolor",
+                    "Iris-virginica"
+            );
+
             perceptron.train(trainingData, 70);
 
             perceptron.showResults(testData);

@@ -19,7 +19,7 @@ public class Reader {
     }
 
     /**
-     * @return Whole file as a string
+     * @return List of generated DataModels
      * @throws IOException when input is invalid
      */
     public List<DataModel> readFile() throws IOException {
