@@ -3,6 +3,7 @@ package model;
 import datamodel.DataObject;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Model {
@@ -18,7 +19,7 @@ public class Model {
      */
     public static String classify(List<DataObject> trainingData, DataObject testObject, int k) {
 
-        PriorityQueue<DataObject> pq = findKNN(trainingData, testObject, k);
+        List<DataObject> pq = findKNN(trainingData, testObject, k);
 
         Map<String, Integer> labelCount = countOccurrence(pq);
 
@@ -31,15 +32,19 @@ public class Model {
      * @param k            k-nn parameter
      * @return PriorityQueue of k-nearest neightbors
      */
-    private static PriorityQueue<DataObject> findKNN(List<DataObject> trainingData, DataObject testObject, int k) {
-        PriorityQueue<DataObject> pq = new PriorityQueue<>(k, Comparator.comparingDouble(a -> euclideanDistance(a, testObject)));
-        trainingData.forEach(dataObject -> {
-            pq.offer(dataObject);
-            if (pq.size() > k) {
-                pq.poll();
-            }
+    private static List<DataObject> findKNN(List<DataObject> trainingData, DataObject testObject, int k) {
+        List<DataObject> knn = new ArrayList<>(k);
+        List<Double> distances = trainingData.stream()
+                .mapToDouble(dataObject -> euclideanDistance(dataObject, testObject))
+                .boxed()
+                .collect(
+                        Collectors.toCollection(() -> new ArrayList<>(trainingData.size()))
+                );
+        IntStream.range(0, k).map(i -> distances.indexOf(Collections.min(distances))).forEachOrdered(minIndex -> {
+            knn.add(trainingData.get(minIndex));
+            distances.set(minIndex, Double.MAX_VALUE);
         });
-        return pq;
+        return knn;
     }
 
     /**
@@ -66,11 +71,12 @@ public class Model {
      * @param pq priority queue of DataObject
      * @return Counted occurances of each label
      */
-    private static Map<String, Integer> countOccurrence(PriorityQueue<DataObject> pq) {
+    private static Map<String, Integer> countOccurrence(List<DataObject> pq) {
 
         Map<String, Integer> labelCount = new HashMap<>();
         for (DataObject dataObject : pq) {
-            labelCount.put(dataObject.getClassName(), labelCount.getOrDefault(dataObject.getClassName(), 0));
+            String className = dataObject.getClassName();
+            labelCount.put(className, labelCount.getOrDefault(className, 0) + 1);
         }
         return labelCount;
     }
@@ -81,7 +87,11 @@ public class Model {
      * @return euclidean distance between both of those DataObjects
      */
     private static double euclideanDistance(DataObject pointA, DataObject pointB) {
-        double sum = IntStream.range(0, pointA.getData().size()).mapToDouble(i -> Math.pow(pointA.getData().get(i) - pointB.getData().get(i), 2)).sum();
+        double sum = 0.0;
+        for (int i = 0; i < pointA.getData().size(); i++) {
+            double difference = pointA.getData().get(i) - pointB.getData().get(i);
+            sum += difference * difference;
+        }
         return Math.sqrt(sum);
     }
 }
