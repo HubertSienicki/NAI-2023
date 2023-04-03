@@ -94,6 +94,7 @@ public class Perceptron {
             sum += weights[i] * features.get(i);
         }
 
+        //TODO: sum-theta
         return (sum >= 0.0) ? 1 : 0;
     }
 
