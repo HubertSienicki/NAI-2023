@@ -33,7 +33,7 @@ public class Main {
 
             Perceptron perceptron = new Perceptron(
                     trainingData.get(0).getData().size(),
-                    0.01,
+                    0.1,
                     "Iris-versicolor",
                     "Iris-virginica"
             );
