@@ -45,7 +45,7 @@ public class FileParser {
     private List<String> splitLine(String line) {
         List<String> split = new ArrayList<>();
         split.add(line.substring(0, 15));
-        split.add(line.substring(15, line.length()));
+        split.add(line.substring(16, line.length()));
         return split;
     }
 
