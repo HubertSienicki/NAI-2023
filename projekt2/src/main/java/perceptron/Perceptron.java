@@ -15,17 +15,19 @@ public class Perceptron {
     private final HashMap<String, Integer> trainingMap = new HashMap<>();
     private final HashMap<Integer, String> resultMap = new HashMap<>();
     private double accuracy = 0.0;
+    private double theta;
     private int counter = 0;
 
     /**
      * @param numFeatures  specifies a number of input features
      * @param learningRate learning rate of an algorithm
      */
-    public Perceptron(int numFeatures, double learningRate, String firstClassName, String secondClassName) {
+    public Perceptron(int numFeatures, double learningRate, String firstClassName, String secondClassName, double theta) {
         this.numFeatures = numFeatures;
         this.weights = new double[numFeatures];
         this.learningRate = learningRate;
         this.random = new Random();
+        this.theta = theta;
         initializeWeights();
 
         trainingMap.put(firstClassName, 0);
@@ -88,14 +90,13 @@ public class Perceptron {
      * @return If dot product is >= 0, return 0, else return 1
      */
     public int predict(List<Double> features) {
-        double sum = 0.0;
+        double net = 0.0;
 
         for (int i = 0; i < weights.length; i++) {
-            sum += weights[i] * features.get(i);
+            net += weights[i] * features.get(i);
         }
-
-        //TODO: sum-theta
-        return (sum >= 0.0) ? 1 : 0;
+        net -= theta;
+        return (net >= 0.0) ? 1 : 0;
     }
 
     /**
@@ -113,6 +114,8 @@ public class Perceptron {
         for (int i = 0; i < weights.length; i++) {
             weights[i] += learningRate * weightCoefficient * features.get(i);
         }
+
+        theta = theta - learningRate*weightCoefficient;
     }
 
     public void showResults(List<DataModel> testData) {

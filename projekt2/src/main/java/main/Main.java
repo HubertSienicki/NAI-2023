@@ -24,10 +24,10 @@ import static menu.Menu.startMenu;
 public class Main {
     public static void main(String[] args) {
         try {
-            Reader reader = new Reader("data/perceptron.data");
+            Reader reader = new Reader("projekt2/data/perceptron.data");
             List<DataModel> trainingData = reader.readFile();
 
-            Reader reader2 = new Reader("data/perceptron.test.data");
+            Reader reader2 = new Reader("projekt2/data/perceptron.test.data");
             List<DataModel> testData = reader2.readFile();
 
 
@@ -35,7 +35,8 @@ public class Main {
                     trainingData.get(0).getData().size(),
                     0.1,
                     "Iris-versicolor",
-                    "Iris-virginica"
+                    "Iris-virginica",
+                    0.5
             );
 
             perceptron.train(trainingData, 70);

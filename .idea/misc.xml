@@ -5,7 +5,7 @@
     <file type="web" url="file://$PROJECT_DIR$/projekt1" />
     <file type="web" url="file://$PROJECT_DIR$/projekt2" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="corretto-16" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17_PREVIEW" project-jdk-name="17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
